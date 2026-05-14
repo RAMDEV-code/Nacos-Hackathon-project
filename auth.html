@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication | NacosLasuLawBot</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+    <div class="auth-container">
+        <!-- Background Elements -->
+        <div class="bg-blobs">
+            <div class="blob blob-1"></div>
+            <div class="blob blob-2"></div>
+        </div>
+
+        <!-- Left Side: Branding -->
+        <div class="auth-brand-side">
+            <div class="brand-content">
+                <a href="index.html" class="logo">
+                    <i class="fa-solid fa-scale-balanced"></i>
+                    <span>NacosLasuLawBot</span>
+                </a>
+                
+                <div class="hero-illustration">
+                    <!-- CSS drawn AI Orb Illustration -->
+                    <div class="ai-orb-container">
+                        <div class="ai-orb">
+                            <div class="orb-core"></div>
+                            <div class="orb-ring ring-1"></div>
+                            <div class="orb-ring ring-2"></div>
+                        </div>
+                        <div class="floating-icons">
+                            <i class="fa-solid fa-book-open icon-1"></i>
+                            <i class="fa-solid fa-gavel icon-2"></i>
+                            <i class="fa-solid fa-robot icon-3"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="brand-text">
+                    <h1>The Constitution Expert</h1>
+                    <p>Unlock the power of AI to navigate legal complexities, specifically tailored for NACOS-LASU students.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side: Auth Forms -->
+        <div class="auth-form-side">
+            <!-- Floating Support Button -->
+            <button class="support-btn" title="Help & Support">
+                <i class="fa-solid fa-question"></i>
+            </button>
+
+            <div class="auth-card">
+                <!-- Login View -->
+                <div class="form-view login-view active" id="loginView">
+                    <div class="card-header">
+                        <h2>Welcome to NacosLasuLawBot</h2>
+                        <p>Your AI Constitution Expert</p>
+                    </div>
+
+                    <form id="loginForm" novalidate>
+                        <div class="input-group">
+                            <label for="loginEmail">Email Address</label>
+                            <div class="input-wrapper">
+                                <i class="fa-regular fa-envelope"></i>
+                                <input type="email" id="loginEmail" placeholder="student@lasu.edu.ng" required>
+                            </div>
+                            <span class="error-text">Please enter a valid email address</span>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="loginPassword">Password</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-lock"></i>
+                                <input type="password" id="loginPassword" placeholder="••••••••" required>
+                                <button type="button" class="toggle-password" data-target="loginPassword">
+                                    <i class="fa-regular fa-eye"></i>
+                                </button>
+                            </div>
+                            <span class="error-text">Password is required</span>
+                        </div>
+
+                        <div class="form-actions-row">
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="rememberMe">
+                                <span class="checkmark"></span>
+                                Remember Me
+                            </label>
+                            <a href="#" class="forgot-link">Forgot Password?</a>
+                        </div>
+
+                        <button type="submit" class="submit-btn login-btn">
+                            <span>Access Constitution AI</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </form>
+
+                    <div class="social-divider">
+                        <span>or continue with</span>
+                    </div>
+
+                    <div class="social-login">
+                        <button class="social-btn google-btn">
+                            <i class="fa-brands fa-google"></i> Google
+                        </button>
+                        <button class="social-btn github-btn">
+                            <i class="fa-brands fa-github"></i> GitHub
+                        </button>
+                    </div>
+
+                    <div class="switch-form-prompt">
+                        <p>Don't have an account? <a href="#" class="switch-link" data-target="signupView">Sign Up</a></p>
+                    </div>
+                </div>
+
+                <!-- Signup View -->
+                <div class="form-view signup-view" id="signupView">
+                    <div class="card-header">
+                        <h2>Create AI Access</h2>
+                        <p>Join the future of legal tech</p>
+                    </div>
+
+                    <form id="signupForm" novalidate>
+                        <div class="input-group">
+                            <label for="signupName">Full Name</label>
+                            <div class="input-wrapper">
+                                <i class="fa-regular fa-user"></i>
+                                <input type="text" id="signupName" placeholder="John Doe" required>
+                            </div>
+                            <span class="error-text">Full name is required</span>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label for="signupDept">Department</label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-building"></i>
+                                    <input type="text" id="signupDept" placeholder="Computer Science" required>
+                                </div>
+                                <span class="error-text">Department is required</span>
+                            </div>
+                            <div class="input-group">
+                                <label for="signupLevel">Level</label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-layer-group"></i>
+                                    <select id="signupLevel" required>
+                                        <option value="" disabled selected>Select Level</option>
+                                        <option value="100">100 Level</option>
+                                        <option value="200">200 Level</option>
+                                        <option value="300">300 Level</option>
+                                        <option value="400">400 Level</option>
+                                        <option value="500">500 Level</option>
+                                    </select>
+                                </div>
+                                <span class="error-text">Level is required</span>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="signupEmail">Email Address</label>
+                            <div class="input-wrapper">
+                                <i class="fa-regular fa-envelope"></i>
+                                <input type="email" id="signupEmail" placeholder="student@lasu.edu.ng" required>
+                            </div>
+                            <span class="error-text">Please enter a valid email address</span>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="input-group">
+                                <label for="signupPassword">Password</label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-lock"></i>
+                                    <input type="password" id="signupPassword" placeholder="••••••••" required>
+                                    <button type="button" class="toggle-password" data-target="signupPassword">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </button>
+                                </div>
+                                <span class="error-text">Min 8 characters required</span>
+                            </div>
+                            <div class="input-group">
+                                <label for="signupConfirmPassword">Confirm Password</label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-lock"></i>
+                                    <input type="password" id="signupConfirmPassword" placeholder="••••••••" required>
+                                </div>
+                                <span class="error-text">Passwords do not match</span>
+                            </div>
+                        </div>
+
+                        <div class="form-actions-row">
+                            <label class="checkbox-container terms-container">
+                                <input type="checkbox" id="termsCheck" required>
+                                <span class="checkmark"></span>
+                                I agree to the <a href="#">Terms & Conditions</a>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="submit-btn signup-btn">
+                            <span>Create AI Access</span>
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        </button>
+                    </form>
+
+                    <div class="switch-form-prompt">
+                        <p>Already have an account? <a href="#" class="switch-link" data-target="loginView">Login</a></p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Success/Error Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="js/auth.js"></script>
+</body>
+</html>
