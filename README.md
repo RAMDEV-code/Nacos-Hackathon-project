@@ -1,17 +1,12 @@
-
 # NacosLasuLawBot — The Constitution Expert
 
 AI-powered constitutional assistant for NACOS-LASU students.
-
-============================================================
 
 ## Project Overview
 
 NacosLasuLawBot is a modern AI legal assistant designed to help NACOS-LASU students understand and navigate the departmental constitution easily.
 
 The platform uses the concept of Retrieval-Augmented Generation (RAG) to provide intelligent and article-cited responses from the constitution and standing orders.
-
-============================================================
 
 ## Problem Statement
 
@@ -21,8 +16,6 @@ Many students:
 - Lack awareness of their rights
 - Find legal documents difficult to navigate
 
-============================================================
-
 ## Solution
 
 NacosLasuLawBot solves this by:
@@ -30,8 +23,6 @@ NacosLasuLawBot solves this by:
 - Citing relevant articles and sections
 - Offering smart legal search
 - Simplifying constitutional interpretation
-
-============================================================
 
 ## Features
 
@@ -42,9 +33,6 @@ NacosLasuLawBot solves this by:
 - Dark / Light Mode
 - Responsive Design
 - Suggested Constitutional Questions
-- Voice Input UI
-
-============================================================
 
 ## Frontend Technologies Used
 
@@ -55,15 +43,10 @@ NacosLasuLawBot solves this by:
 - CSS Variables
 - localStorage
 
-============================================================
-
 ## Backend Technologies Used
 
 
 
-
-
-============================================================
 
 ## RAG Workflow
 
@@ -74,7 +57,7 @@ NacosLasuLawBot solves this by:
 5. Retrieve relevant sections
 6. Generate AI responses with citations
 
-============================================================
+
 
 ## How To Run
 
@@ -88,23 +71,19 @@ or
 2.Locate Index.html file 
 3.right-click
 4.Choose the your suitable brower to view the website
-============================================================
+
 
 ## Live Website URL
 
 LIVE URL:
-https://your-live-link.com
-
-============================================================
+(https://ramdev-code.github.io/Nacos-Hackathon-project/)
 
 ## Future Improvements
 - Voice assistant
 - Saved conversations
 - Multi-department support
 
-============================================================
-
-## Credits
+## Project
 
 Built for NACOS-LASU Hackathon
 
