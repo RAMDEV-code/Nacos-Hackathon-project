@@ -35,18 +35,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // === Theme Management ===
     function initTheme() {
-        // Default is light-mode in logic if not set, but HTML has dark-mode
-        // Let's toggle based on body class
         updateThemeIcon();
         
         themeToggleBtn.addEventListener('click', () => {
-            body.classList.toggle('light-mode');
-            updateThemeIcon();
+            if (window.toggleGlobalTheme) {
+                window.toggleGlobalTheme();
+            }
         });
+
+        window.addEventListener('themeChanged', updateThemeIcon);
     }
 
     function updateThemeIcon() {
-        if (body.classList.contains('light-mode')) {
+        if (document.documentElement.classList.contains('light-mode')) {
             themeToggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i> Dark Mode';
         } else {
             themeToggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i> Light Mode';

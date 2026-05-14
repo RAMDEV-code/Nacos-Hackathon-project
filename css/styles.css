@@ -36,7 +36,7 @@
 }
 
 /* Light Theme overrides */
-body.light-mode {
+:root.light-mode {
     --primary: #5B21B6; /* Deep Royal Purple */
     --primary-hover: #4C1D95;
     --secondary: #7C3AED;
@@ -78,7 +78,7 @@ body {
     transition: background-color var(--transition-normal), color var(--transition-normal);
 }
 
-body.light-mode {
+:root.light-mode body {
     background: var(--bg-main-gradient);
 }
 
@@ -310,7 +310,7 @@ ul {
     z-index: 50;
 }
 
-body.light-mode .topbar {
+:root.light-mode .topbar {
     background-color: rgba(255, 255, 255, 0.8);
 }
 
@@ -425,7 +425,7 @@ body.light-mode .topbar {
     animation-delay: -5s;
 }
 
-body.light-mode .glow-blob {
+:root.light-mode .glow-blob {
     opacity: 0.2;
 }
 
@@ -675,7 +675,7 @@ section {
     margin-bottom: 1rem;
 }
 
-body.light-mode .search-bar {
+:root.light-mode .search-bar {
     background: rgba(255, 255, 255, 0.5);
 }
 
@@ -709,7 +709,7 @@ body.light-mode .search-bar {
     transition: var(--transition-fast);
 }
 
-body.light-mode .tag {
+:root.light-mode .tag {
     background: rgba(0, 0, 0, 0.05);
 }
 
