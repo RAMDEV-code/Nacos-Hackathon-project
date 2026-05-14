@@ -1,24 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NacosLasuLawBot — The Constitution Expert</title>
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <!-- CSS -->
     <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body class="dark-mode"> <!-- Default to dark mode for premium feel -->
     <div class="app-container">
-        
+
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
@@ -30,16 +34,16 @@
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
-            
+
             <button class="new-chat-btn" id="newChatBtn">
                 <i class="fa-solid fa-plus"></i> New Chat
             </button>
-            
+
             <div class="search-chats">
                 <i class="fa-solid fa-search"></i>
                 <input type="text" placeholder="Search chats...">
             </div>
-            
+
             <div class="sidebar-section">
                 <h3>Recent Chats</h3>
                 <ul class="chat-history">
@@ -56,7 +60,7 @@
                     <li class="topic-item"><i class="fa-regular fa-bookmark"></i> Congress Powers</li>
                 </ul>
             </div>
-            
+
             <div class="sidebar-footer">
                 <button class="theme-toggle" id="themeToggleBtn">
                     <i class="fa-solid fa-sun"></i> Light Mode
@@ -74,19 +78,20 @@
                 </button>
                 <div class="topbar-title">The Constitution Expert</div>
                 <div class="topbar-actions">
-                    <button class="action-btn" title="Information"><i class="fa-regular fa-circle-question"></i></button>
+                    <button class="action-btn" title="Information"><i
+                            class="fa-regular fa-circle-question"></i></button>
                     <div class="user-avatar">
-                        <i class="fa-solid fa-user"></i>
+                        <a href="auth.html"><i class="fa-solid fa-user"></i></a>
                     </div>
                 </div>
             </header>
 
             <!-- Views Container -->
             <div class="views-container">
-                
+
                 <!-- Landing View -->
                 <div id="landing-view" class="view active">
-                    
+
                     <!-- Hero Section -->
                     <section class="hero">
                         <div class="hero-background">
@@ -95,17 +100,22 @@
                         </div>
                         <div class="hero-content">
                             <div class="hero-badge">AI-Powered Assistant</div>
-                            <h1 class="hero-title">Your AI Constitution Expert for <span class="highlight">NACOS-LASU</span></h1>
-                            <p class="hero-subtitle">Ask questions about the constitution and get accurate, article-cited answers instantly.</p>
-                            
+                            <h1 class="hero-title">Your AI Constitution Expert for <span
+                                    class="highlight">NACOS-LASU</span></h1>
+                            <p class="hero-subtitle">Ask questions about the constitution and get accurate,
+                                article-cited answers instantly.</p>
+
                             <div class="typing-demo-container">
                                 <i class="fa-solid fa-sparkles"></i>
-                                <span id="hero-typing-text">What are the rights of a member under Article 12?</span><span class="cursor">|</span>
+                                <span id="hero-typing-text">What are the rights of a member under Article
+                                    12?</span><span class="cursor">|</span>
                             </div>
 
                             <div class="hero-cta">
-                                <button class="btn btn-primary" id="startAskingBtn">Start Asking <i class="fa-solid fa-arrow-right"></i></button>
-                                <button class="btn btn-secondary" id="exploreBtn">Explore Constitution <i class="fa-solid fa-book-open"></i></button>
+                                <button class="btn btn-primary" id="startAskingBtn">Start Asking <i
+                                        class="fa-solid fa-arrow-right"></i></button>
+                                <button class="btn btn-secondary" id="exploreBtn">Explore Constitution <i
+                                        class="fa-solid fa-book-open"></i></button>
                             </div>
                         </div>
                     </section>
@@ -127,7 +137,8 @@
                             <div class="feature-card">
                                 <div class="feature-icon"><i class="fa-solid fa-scale-unbalanced"></i></div>
                                 <h3>Standing Orders</h3>
-                                <p>Integrated intelligence encompassing parliamentary procedures and standing orders.</p>
+                                <p>Integrated intelligence encompassing parliamentary procedures and standing orders.
+                                </p>
                             </div>
                         </div>
                     </section>
@@ -193,20 +204,26 @@
                                 <!-- Suggested prompts generated by JS -->
                             </div>
                         </div>
-                        
+
                         <!-- Messages will be appended here -->
                     </div>
-                    
+
                     <div class="chat-input-wrapper">
                         <div class="chat-input-container">
-                            <button class="input-action-btn" title="Attach Document (Mock)"><i class="fa-solid fa-paperclip"></i></button>
-                            <textarea id="chatInput" placeholder="Ask me anything about the constitution..." rows="1"></textarea>
-                            <button class="input-action-btn voice-btn" title="Voice Input"><i class="fa-solid fa-microphone"></i></button>
-                            <button class="send-btn" id="sendBtn" disabled><i class="fa-solid fa-paper-plane"></i></button>
+                            <button class="input-action-btn" title="Attach Document (Mock)"><i
+                                    class="fa-solid fa-paperclip"></i></button>
+                            <textarea id="chatInput" placeholder="Ask me anything about the constitution..."
+                                rows="1"></textarea>
+                            <button class="input-action-btn voice-btn" title="Voice Input"><i
+                                    class="fa-solid fa-microphone"></i></button>
+                            <button class="send-btn" id="sendBtn" disabled><i
+                                    class="fa-solid fa-paper-plane"></i></button>
                         </div>
                         <div class="input-footer">
-                            <span class="shortcut-hint">Press <strong>Enter</strong> to send, <strong>Shift+Enter</strong> for new line</span>
-                            <span class="disclaimer">NacosLasuLawBot can make mistakes. Verify important legal information.</span>
+                            <span class="shortcut-hint">Press <strong>Enter</strong> to send,
+                                <strong>Shift+Enter</strong> for new line</span>
+                            <span class="disclaimer">NacosLasuLawBot can make mistakes. Verify important legal
+                                information.</span>
                         </div>
                     </div>
                 </div>
@@ -219,6 +236,7 @@
     <script src="js/dummyData.js"></script>
     <script src="js/app.js"></script>
 </body>
+
 </html>
 
 <!DOCTYPE html>
