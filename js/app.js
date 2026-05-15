@@ -21,6 +21,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatMessages = document.getElementById('chatMessages');
     const suggestedPromptsContainer = document.getElementById('suggestedPrompts');
     const chatWelcome = document.querySelector('.chat-welcome');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const userAvatar = document.getElementById('userAvatar');
+    const chatHistoryList = document.querySelector('.chat-history');
+    const BACKEND_URL = "https://nacos-lawbot.onrender.com";
+    const conversationHistory = [];
+    let currentConversationId = null;
+    let currentUser = null;
     
     const quickLinksGrid = document.getElementById('quickLinksGrid');
     const explorerContent = document.getElementById('explorerContent');
@@ -32,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderQuickLinks();
     renderExplorerArticles();
     renderSuggestedPrompts();
+    initAuth();
 
     // === Theme Management ===
     function initTheme() {
@@ -81,11 +89,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    startAskingBtn.addEventListener('click', showChatView);
-    newChatBtn.addEventListener('click', showChatView);
+   startAskingBtn.addEventListener('click', () => {
+    if (!currentUser) {
+        window.location.href = `${BACKEND_URL}/auth/google`;
+    } else {
+        startNewChat();
+    }
+});
+    newChatBtn.addEventListener('click', startNewChat);
     navHomeBtn.addEventListener('click', (e) => {
         e.preventDefault();
         showLandingView();
+    });
+
+    logoutBtn.addEventListener('click', () => {
+        window.location.href = `${BACKEND_URL}/auth/logout`;
     });
 
     exploreBtn.addEventListener('click', () => {
@@ -220,7 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     sendBtn.addEventListener('click', handleSend);
 
-    function handleSend() {
+    async function handleSend() {
         const message = chatInput.value.trim();
         if (!message) return;
 
@@ -229,8 +247,9 @@ document.addEventListener('DOMContentLoaded', () => {
             chatWelcome.style.display = 'none';
         }
 
-        // Add User Message
+        // Add User Message and history
         appendMessage('user', message);
+        conversationHistory.push({ role: 'user', content: message });
         
         // Reset Input
         chatInput.value = '';
@@ -240,11 +259,19 @@ document.addEventListener('DOMContentLoaded', () => {
         // Show Typing Indicator
         const typingId = showTypingIndicator();
 
-        // Simulate RAG Backend Processing Delay
-        setTimeout(() => {
+        try {
+            const reply = await getBotReply(message);
             removeTypingIndicator(typingId);
-            generateAIResponse(message);
-        }, 1500 + Math.random() * 1000); // 1.5s - 2.5s delay
+            appendMessage('ai', reply);
+            conversationHistory.push({ role: 'assistant', content: reply });
+            await loadConversations();
+        } catch (error) {
+            removeTypingIndicator(typingId);
+            const errorMessage = 'Something went wrong, please try again';
+            appendMessage('ai', errorMessage);
+            conversationHistory.push({ role: 'assistant', content: errorMessage });
+            console.error('Chat request error:', error);
+        }
     }
 
     function appendMessage(sender, text, citation = null) {
@@ -302,6 +329,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="typing-dot"></div>
                     <div class="typing-dot"></div>
                 </div>
+                <div class="typing-text">Thinking...</div>
             </div>
         `;
         
@@ -315,21 +343,201 @@ document.addEventListener('DOMContentLoaded', () => {
         if (el) el.remove();
     }
 
-    function generateAIResponse(userMessage) {
-        const lowerMsg = userMessage.toLowerCase();
-        let responseData = window.DUMMY_DATA.responses["default"];
+  async function initAuth() {
+    try {
+        const response = await fetch(`${BACKEND_URL}/auth/me`, {
+            credentials: 'include'
+        });
 
-        // Simple keyword matching for demo purposes
-        const keywords = Object.keys(window.DUMMY_DATA.responses);
-        for (let kw of keywords) {
-            if (kw !== "default" && lowerMsg.includes(kw)) {
-                responseData = window.DUMMY_DATA.responses[kw];
-                break;
-            }
+        if (response.status === 401) {
+              userAvatar.style.display = 'none';      
+    logoutBtn.style.display = 'none';       
+            // Not logged in — show login button, hide user avatar
+            userAvatar.innerHTML = '<i class="fa-solid fa-user"></i>';
+            userAvatar.title = 'Not signed in';
+            
+            // Add login button to topbar
+            const loginBtn = document.createElement('button');
+            loginBtn.className = 'btn btn-primary';
+            loginBtn.style.fontSize = '0.85rem';
+            loginBtn.style.padding = '0.5rem 1rem';
+            loginBtn.innerHTML = '<i class="fa-brands fa-google"></i> Sign in';
+            loginBtn.addEventListener('click', () => {
+                window.location.href = `${BACKEND_URL}/auth/google`;
+            });
+            
+            // Insert before avatar
+            userAvatar.parentElement.insertBefore(loginBtn, userAvatar);
+            return;
         }
 
-        // Simulate typing effect for the answer
-        appendMessage('ai', responseData.text, responseData.citation);
+        currentUser = await response.json();
+        setUserProfile(currentUser);
+        await loadConversations();
+
+    } catch (error) {
+        console.error('Auth initialization error:', error);
+    }
+}
+
+    function setUserProfile(user) {
+        if (!userAvatar) return;
+
+        const displayName = user.name || user.email || 'Signed in user';
+        userAvatar.title = displayName;
+
+        if (user.photo) {
+            userAvatar.innerHTML = `<img src="${user.photo}" alt="${displayName}">`;
+        } else {
+            userAvatar.innerHTML = '<i class="fa-solid fa-user"></i>';
+        }
+    }
+
+    async function apiFetch(path, options = {}) {
+        const response = await fetch(`${BACKEND_URL}${path}`, {
+            credentials: 'include',
+            ...options
+        });
+
+       if (response.status === 401 && !path.includes('/api/chat')) {
+    window.location.href = `${BACKEND_URL}/auth/google`;
+    throw new Error('Unauthorized');
+}
+
+        return response;
+    }
+
+    async function loadConversations() {
+        try {
+            const response = await apiFetch('/api/conversations');
+            if (!response.ok) {
+                throw new Error(`Conversations load failed: ${response.status}`);
+            }
+
+            const data = await response.json();
+            const conversations = Array.isArray(data) ? data : data.conversations || [];
+            renderConversationList(conversations);
+        } catch (error) {
+            console.error('Load conversations error:', error);
+        }
+    }
+
+    function renderConversationList(conversations = []) {
+        if (!chatHistoryList) return;
+
+        chatHistoryList.innerHTML = '';
+
+        conversations.forEach(conversation => {
+            const li = document.createElement('li');
+            li.className = 'chat-item';
+            if (conversation.id && conversation.id === currentConversationId) {
+                li.classList.add('active');
+            }
+
+            const title = conversation.title || (conversation.messages && conversation.messages[0] && conversation.messages[0].content) || 'Untitled Chat';
+            const date = conversation.updatedAt || conversation.createdAt || '';
+
+            li.innerHTML = `
+                <div class="conv-item-main">
+                    <span class="conv-title">${title}</span>
+                    <span class="conv-date">${formatConversationDate(date)}</span>
+                </div>
+                <button class="conv-delete-btn" title="Delete conversation"><i class="fa-solid fa-trash"></i></button>
+            `;
+
+            li.querySelector('.conv-item-main').addEventListener('click', () => loadConversation(conversation.id));
+            li.querySelector('.conv-delete-btn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                deleteConversation(conversation.id);
+            });
+
+            chatHistoryList.appendChild(li);
+        });
+    }
+
+    async function loadConversation(conversationId) {
+        try {
+            const response = await apiFetch(`/api/conversations/${encodeURIComponent(conversationId)}`);
+            if (!response.ok) {
+                throw new Error(`Conversation load failed: ${response.status}`);
+            }
+
+            const data = await response.json();
+            currentConversationId = data.id || conversationId;
+            conversationHistory.length = 0;
+            clearChatMessages();
+
+            const messages = Array.isArray(data.messages) ? data.messages : [];
+            if (messages.length === 0) {
+                chatMessages.appendChild(chatWelcome);
+                chatWelcome.style.display = 'flex';
+            } else {
+                messages.forEach(message => {
+                    const role = message.role === 'assistant' ? 'ai' : 'user';
+                    const content = message.content || message.text || '';
+                    appendMessage(role, content);
+                    conversationHistory.push({ role: role === 'ai' ? 'assistant' : 'user', content });
+                });
+            }
+
+            await loadConversations();
+        } catch (error) {
+            console.error('Load conversation error:', error);
+        }
+    }
+
+    async function deleteConversation(conversationId) {
+        try {
+            const response = await apiFetch(`/api/conversations/${encodeURIComponent(conversationId)}`, {
+                method: 'DELETE'
+            });
+            if (!response.ok) {
+                throw new Error(`Delete failed: ${response.status}`);
+            }
+
+            if (conversationId === currentConversationId) {
+                startNewChat();
+            }
+            await loadConversations();
+        } catch (error) {
+            console.error('Delete conversation error:', error);
+        }
+    }
+
+    function startNewChat() {
+        currentConversationId = null;
+        conversationHistory.length = 0;
+        clearChatMessages();
+        chatMessages.appendChild(chatWelcome);
+        chatWelcome.style.display = 'flex';
+        showChatView();
+    }
+
+    function clearChatMessages() {
+        chatMessages.innerHTML = '';
+    }
+
+    function formatConversationDate(rawDate) {
+        if (!rawDate) return '';
+        const date = new Date(rawDate);
+        if (Number.isNaN(date.getTime())) return '';
+        return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+    }
+
+    async function getBotReply(userMessage) {
+        const response = await apiFetch(`/api/chat`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: userMessage, conversationId: currentConversationId })
+        });
+
+        if (!response.ok) {
+            throw new Error(`Backend returned status ${response.status}`);
+        }
+
+        const data = await response.json();
+        currentConversationId = data.conversationId || currentConversationId;
+        return data.reply || 'Sorry, I could not get a response.';
     }
 
     function scrollToBottom() {
