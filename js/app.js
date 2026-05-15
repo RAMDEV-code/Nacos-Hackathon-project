@@ -260,7 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
             removeTypingIndicator(typingId);
             appendMessage('ai', reply);
             conversationHistory.push({ role: 'assistant', content: reply });
-            await loadConversations();
+            if (currentUser) await loadConversations();
         } catch (error) {
             removeTypingIndicator(typingId);
             const errorMessage = 'Something went wrong, please try again';
