@@ -344,40 +344,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
   async function initAuth() {
-    try {
-        const response = await fetch(`${BACKEND_URL}/auth/me`, {
-            credentials: 'include'
-        });
-
-        if (response.status === 401) {
-              userAvatar.style.display = 'none';      
-    logoutBtn.style.display = 'none';       
-            // Not logged in — show login button, hide user avatar
-            userAvatar.innerHTML = '<i class="fa-solid fa-user"></i>';
-            userAvatar.title = 'Not signed in';
-            
-            // Add login button to topbar
-            const loginBtn = document.createElement('button');
-            loginBtn.className = 'btn btn-primary';
-            loginBtn.style.fontSize = '0.85rem';
-            loginBtn.style.padding = '0.5rem 1rem';
-            loginBtn.innerHTML = '<i class="fa-brands fa-google"></i> Sign in';
-            loginBtn.addEventListener('click', () => {
-                window.location.href = `${BACKEND_URL}/auth/google`;
-            });
-            
-            // Insert before avatar
-            userAvatar.parentElement.insertBefore(loginBtn, userAvatar);
-            return;
-        }
-
-        currentUser = await response.json();
-        setUserProfile(currentUser);
-        await loadConversations();
-
-    } catch (error) {
-        console.error('Auth initialization error:', error);
-    }
+    logoutBtn.style.display = 'none';
+    userAvatar.style.display = 'none';
 }
 
     function setUserProfile(user) {
