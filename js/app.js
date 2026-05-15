@@ -90,11 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
    startAskingBtn.addEventListener('click', () => {
-    if (!currentUser) {
-        window.location.href = `${BACKEND_URL}/auth/google`;
-    } else {
-        startNewChat();
-    }
+    startNewChat();
 });
     newChatBtn.addEventListener('click', startNewChat);
     navHomeBtn.addEventListener('click', (e) => {
